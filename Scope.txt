@@ -1,0 +1,188 @@
+# 🟩 **12-WEEK FITNESS TRANSFORMATION CHALLENGE**
+
+### **(RFM Body Fat %, Fat Mass Lost, Strength 5RM, Endurance 3 km Time + Avg HR)**
+
+---
+
+# 1. BODY COMPOSITION (RFM-BASED)
+
+## 1.1 Metrics
+
+* **Body Fat % (calculated using RFM)**
+* **Fat Mass Lost (kg)**
+
+## 1.2 RFM Formula (Relative Fat Mass)
+
+### **For Males**
+
+[
+\text{RFM} = 64 - \left(20 \times \frac{\text{Height}}{\text{Waist}}\right)
+]
+
+**Notes:**
+
+* Height and waist must be in the **same units** (cm OR inches).
+* Waist measured at navel on relaxed exhale.
+
+---
+
+## 1.3 How to Calculate Fat Mass
+
+### Step 1 — Starting Body Fat %
+
+[
+\text{RFM (Start)} = 64 - \left(20 \times \frac{\text{Height}}{\text{Starting Waist}}\right)
+]
+
+### Step 2 — Starting Fat Mass
+
+[
+\text{Starting Fat Mass} = \text{Starting Weight} \times \left(\frac{\text{RFM (Start)}}{100}\right)
+]
+
+### Step 3 — Ending Body Fat %
+
+(Recalculate RFM using the updated waist measurement)
+
+### Step 4 — Ending Fat Mass
+
+[
+\text{Ending Fat Mass} = \text{Ending Weight} \times \left(\frac{\text{RFM (End)}}{100}\right)
+]
+
+### Step 5 — Fat Mass Lost
+
+[
+\text{Fat Mass Lost} = \text{Starting Fat Mass} - \text{Ending Fat Mass}
+]
+
+---
+
+## 1.4 Body Composition Score
+
+To keep things fair, fat loss is expressed as a percentage:
+
+[
+\text{Body Comp Score} =
+\frac{\text{Fat Mass Lost}}{\text{Starting Fat Mass}} \times 100
+]
+
+---
+
+# 2. STRENGTH
+
+## 2.1 Metrics
+
+* **5RM Bench Press**
+* **5RM Front Squat**
+* **5RM Deadlift**
+* **Push-ups (1-minute max)**
+* **Plank (time to failure)**
+
+## 2.2 Rules
+
+* All barbell lifts must use a **20 kg Olympic barbell**.
+* 5RM = heaviest load for 5 perfect reps.
+* Push-ups: strict form only.
+* Plank ends when hips sag or form breaks.
+
+## 2.3 Strength Scoring
+
+[
+% \text{Improvement} =
+\frac{\text{Final} - \text{Initial}}{\text{Initial}} \times 100
+]
+
+Strength Score = **average % improvement across all 5 tests**.
+
+---
+
+# 3. ENDURANCE
+
+## 3.1 Metrics
+
+* **3 km treadmill time** (0% incline)
+* **Average heart rate during the 3 km**
+
+## 3.2 Rules
+
+* Treadmill must be set to **0% incline**.
+* Smartwatch must record:
+
+  * 3 km time
+  * Average HR
+
+## 3.3 Endurance Scoring
+
+### **(1) Time % Improvement**
+
+[
+% \text{Time Improvement} =
+\frac{\text{Initial Time} - \text{Final Time}}{\text{Initial Time}} \times 100
+]
+
+### **(2) HR % Improvement**
+
+[
+% \text{HR Improvement} =
+\frac{\text{Initial HR} - \text{Final HR}}{\text{Initial HR}} \times 100
+]
+
+### **Endurance Score**
+
+[
+\text{Endurance Score} =
+\frac{\text{Time % Improvement} + \text{HR % Improvement}}{2}
+]
+
+---
+
+# 4. FINAL SCORING (Equal Weighting)
+
+Each major category = **33.33%** of the total score.
+
+[
+\text{Final Score}=
+(\text{Body Comp Score} \times 0.3333) +
+(\text{Strength Score} \times 0.3333) +
+(\text{Endurance Score} \times 0.3333)
+]
+
+Highest final score = **Overall Champion**.
+
+---
+
+# 5. AWARDS
+
+* **Overall Champion**
+* **Body Composition Champion**
+* **Strength Champion**
+* **Endurance Champion**
+
+---
+
+# 6. TESTING SCHEDULE
+
+### **Testing occurs every 2 weeks for all metrics.**
+
+| Week        | Tests                 |
+| ----------- | --------------------- |
+| **Week 0**  | Baseline measurements |
+| **Week 2**  | Full test / weigh-in  |
+| **Week 4**  | Full test / weigh-in  |
+| **Week 6**  | Full test / weigh-in  |
+| **Week 8**  | Full test / weigh-in  |
+| **Week 10** | Full test / weigh-in  |
+| **Week 12** | Final test & ranking  |
+
+---
+
+# ✔ FINAL SUMMARY
+
+This challenge is now:
+
+* **Scientific** (RFM + fat mass instead of scale estimates)
+* **Fair** (percent improvements)
+* **Balanced** (strength + endurance + fat loss)
+* **Consistent** (testing every 2 weeks)
+* **Equipment-light** (no smart scales required)

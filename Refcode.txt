@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Fitness Challenge Arena</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #00ff41;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41; }
+            to { text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41, 0 0 40px #00ff41; }
+        }
+        
+        h1 {
+            font-size: clamp(1rem, 4vw, 2rem);
+            margin-bottom: 20px;
+            color: #ff006e;
+        }
+        
+        .week-display {
+            background: #0f3460;
+            padding: 15px;
+            border: 3px solid #00ff41;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: clamp(0.6rem, 2vw, 1rem);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            background: #0f3460;
+            border: 3px solid #00ff41;
+            color: #00ff41;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: clamp(0.5rem, 1.5vw, 0.8rem);
+            text-align: center;
+        }
+        
+        .tab:hover {
+            background: #00ff41;
+            color: #1a1a2e;
+            transform: translateY(-3px);
+        }
+        
+        .tab.active {
+            background: #ff006e;
+            border-color: #ff006e;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .card {
+            background: rgba(15, 52, 96, 0.8);
+            border: 3px solid #00ff41;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: clamp(0.5rem, 1.5vw, 0.7rem);
+            color: #00d9ff;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a2e;
+            border: 2px solid #00ff41;
+            color: #00ff41;
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(0.5rem, 1.5vw, 0.7rem);
+            border-radius: 5px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #ff006e;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
+        }
+        
+        button {
+            background: #ff006e;
+            color: white;
+            border: 3px solid #ff006e;
+            padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(0.5rem, 1.5vw, 0.8rem);
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #00ff41;
+            border-color: #00ff41;
+            color: #1a1a2e;
+            transform: scale(1.05);
+        }
+        
+        .leaderboard-item {
+            background: rgba(26, 26, 46, 0.9);
+            border: 2px solid #00ff41;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .leaderboard-item:hover {
+            transform: translateX(10px);
+            border-color: #ff006e;
+        }
+        
+        .rank {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #ff006e;
+            margin-right: 15px;
+        }
+        
+        .rank-1 { color: #ffd700; }
+        .rank-2 { color: #c0c0c0; }
+        .rank-3 { color: #cd7f32; }
+        
+        .player-info {
+            flex: 1;
+        }
+        
+        .player-name {
+            font-size: clamp(0.6rem, 2vw, 1rem);
+            color: #00d9ff;
+        }
+        
+        .score {
+            font-size: clamp(0.7rem, 2.5vw, 1.2rem);
+            color: #00ff41;
+        }
+        
+        .progress-bar {
+            background: #1a1a2e;
+            border: 2px solid #00ff41;
+            height: 30px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #00ff41, #00d9ff);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .metric-card {
+            background: rgba(26, 26, 46, 0.9);
+            border: 2px solid #00d9ff;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .metric-title {
+            color: #ff006e;
+            font-size: 0.6rem;
+            margin-bottom: 10px;
+        }
+        
+        .metric-value {
+            color: #00ff41;
+            font-size: 1rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .player-detail {
+            background: rgba(15, 52, 96, 0.9);
+            border: 3px solid #ff006e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .week-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .week-btn {
+            padding: 10px 15px;
+            background: #0f3460;
+            border: 2px solid #00ff41;
+            color: #00ff41;
+            cursor: pointer;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .week-btn.active {
+            background: #ff006e;
+            border-color: #ff006e;
+            color: white;
+        }
+        
+        .week-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 12-WEEK FITNESS CHALLENGE ARENA 🎮</h1>
+            <div class="week-display" id="currentWeek">CURRENT WEEK: 0</div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('dashboard')">📊 DASHBOARD</div>
+            <div class="tab" onclick="switchTab('enter')">⚡ ENTER DATA</div>
+            <div class="tab" onclick="switchTab('overall')">🏆 OVERALL</div>
+            <div class="tab" onclick="switchTab('bodycomp')">💪 BODY COMP</div>
+            <div class="tab" onclick="switchTab('strength')">⚡ STRENGTH</div>
+            <div class="tab" onclick="switchTab('endurance')">🏃 ENDURANCE</div>
+        </div>
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; color: #ff006e; font-size: clamp(0.8rem, 2.5vw, 1.2rem);">PLAYER PROGRESS</h2>
+                <div id="playerProgressList"></div>
+            </div>
+        </div>
+        
+        <!-- Enter Data Tab -->
+        <div id="enter" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; color: #ff006e; font-size: clamp(0.8rem, 2.5vw, 1.2rem);">ENTER YOUR DATA</h2>
+                
+                <div class="form-group">
+                    <label>PLAYER NAME</label>
+                    <input type="text" id="playerName" placeholder="Enter your name">
+                </div>
+                
+                <button onclick="loadPlayerData()">LOAD / CREATE PLAYER</button>
+                
+                <div id="dataEntryForm" class="hidden" style="margin-top: 30px;">
+                    <div class="week-selector" id="weekSelector"></div>
+                    
+                    <div id="weekDataForm"></div>
+                    
+                    <button onclick="savePlayerData()">💾 SAVE PROGRESS</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Overall Leaderboard -->
+        <div id="overall" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; color: #ff006e; font-size: clamp(0.8rem, 2.5vw, 1.2rem);">🏆 OVERALL CHAMPIONS</h2>
+                <div id="overallLeaderboard"></div>
+            </div>
+        </div>
+        
+        <!-- Body Comp Leaderboard -->
+        <div id="bodycomp" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; color: #ff006e; font-size: clamp(0.8rem, 2.5vw, 1.2rem);">💪 BODY COMPOSITION CHAMPIONS</h2>
+                <div id="bodycompLeaderboard"></div>
+            </div>
+        </div>
+        
+        <!-- Strength Leaderboard -->
+        <div id="strength" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; color: #ff006e; font-size: clamp(0.8rem, 2.5vw, 1.2rem);">⚡ STRENGTH CHAMPIONS</h2>
+                <div id="strengthLeaderboard"></div>
+            </div>
+        </div>
+        
+        <!-- Endurance Leaderboard -->
+        <div id="endurance" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px; color: #ff006e; font-size: clamp(0.8rem, 2.5vw, 1.2rem);">🏃 ENDURANCE CHAMPIONS</h2>
+                <div id="enduranceLeaderboard"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize app state
+        let currentPlayer = null;
+        let currentWeekEditing = 0;
+        
+        // Challenge start date - CHANGE THIS TO YOUR CHALLENGE START DATE
+        const challengeStartDate = new Date('2025-01-20'); // Format: YYYY-MM-DD
+        
+        function getCurrentWeek() {
+            const now = new Date();
+            const diffTime = Math.abs(now - challengeStartDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const week = Math.floor(diffDays / 14);
+            return Math.min(week, 6); // Max week 6 (week 12)
+        }
+        
+        function updateWeekDisplay() {
+            const currentWeek = getCurrentWeek();
+            const weekNumber = currentWeek * 2;
+            document.getElementById('currentWeek').textContent = `CURRENT WEEK: ${weekNumber}`;
+        }
+        
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'overall') updateOverallLeaderboard();
+            if (tabName === 'bodycomp') updateBodyCompLeaderboard();
+            if (tabName === 'strength') updateStrengthLeaderboard();
+            if (tabName === 'endurance') updateEnduranceLeaderboard();
+            if (tabName === 'dashboard') updateDashboard();
+        }
+        
+        async function loadPlayerData() {
+            const name = document.getElementById('playerName').value.trim();
+            if (!name) {
+                alert('Please enter your name!');
+                return;
+            }
+            
+            currentPlayer = name;
+            
+            try {
+                const result = await window.storage.get(`player:${name}`);
+                
+                if (result) {
+                    currentPlayer = JSON.parse(result.value);
+                } else {
+                    currentPlayer = {
+                        name: name,
+                        weeks: {}
+                    };
+                }
+                
+                renderWeekSelector();
+                renderWeekDataForm();
+                document.getElementById('dataEntryForm').classList.remove('hidden');
+                
+            } catch (error) {
+                currentPlayer = {
+                    name: name,
+                    weeks: {}
+                };
+                renderWeekSelector();
+                renderWeekDataForm();
+                document.getElementById('dataEntryForm').classList.remove('hidden');
+            }
+        }
+        
+        function renderWeekSelector() {
+            const container = document.getElementById('weekSelector');
+            container.innerHTML = '';
+            
+            const currentWeek = getCurrentWeek();
+            const weeks = [0, 2, 4, 6, 8, 10, 12];
+            
+            weeks.forEach((week, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'week-btn';
+                btn.textContent = `WEEK ${week}`;
+                btn.onclick = () => selectWeek(index);
+                
+                if (index === currentWeekEditing) {
+                    btn.classList.add('active');
+                }
+                
+                if (index > currentWeek) {
+                    btn.disabled = true;
+                }
+                
+                container.appendChild(btn);
+            });
+        }
+        
+        function selectWeek(weekIndex) {
+            currentWeekEditing = weekIndex;
+            renderWeekSelector();
+            renderWeekDataForm();
+        }
+        
+        function renderWeekDataForm() {
+            const container = document.getElementById('weekDataForm');
+            const weeks = [0, 2, 4, 6, 8, 10, 12];
+            const weekNumber = weeks[currentWeekEditing];
+            const weekData = currentPlayer.weeks[weekNumber] || {};
+            
+            container.innerHTML = `
+                <h3 style="color: #00d9ff; margin-bottom: 20px; font-size: 0.9rem;">WEEK ${weekNumber} DATA</h3>
+                
+                <div style="background: rgba(26,26,46,0.8); padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+                    <h4 style="color: #ff006e; margin-bottom: 15px; font-size: 0.7rem;">BODY COMPOSITION</h4>
+                    <div class="form-group">
+                        <label>Height (cm)</label>
+                        <input type="number" step="0.1" id="height" value="${weekData.height || ''}" placeholder="e.g., 175">
+                    </div>
+                    <div class="form-group">
+                        <label>Weight (kg)</label>
+                        <input type="number" step="0.1" id="weight" value="${weekData.weight || ''}" placeholder="e.g., 80">
+                    </div>
+                    <div class="form-group">
+                        <label>Waist (cm, at navel)</label>
+                        <input type="number" step="0.1" id="waist" value="${weekData.waist || ''}" placeholder="e.g., 85">
+                    </div>
+                </div>
+                
+                <div style="background: rgba(26,26,46,0.8); padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+                    <h4 style="color: #ff006e; margin-bottom: 15px; font-size: 0.7rem;">STRENGTH (5RM in kg)</h4>
+                    <div class="form-group">
+                        <label>Bench Press 5RM (kg)</label>
+                        <input type="number" step="0.5" id="bench" value="${weekData.bench || ''}" placeholder="e.g., 60">
+                    </div>
+                    <div class="form-group">
+                        <label>Front Squat 5RM (kg)</label>
+                        <input type="number" step="0.5" id="squat" value="${weekData.squat || ''}" placeholder="e.g., 80">
+                    </div>
+                    <div class="form-group">
+                        <label>Deadlift 5RM (kg)</label>
+                        <input type="number" step="0.5" id="deadlift" value="${weekData.deadlift || ''}" placeholder="e.g., 100">
+                    </div>
+                    <div class="form-group">
+                        <label>Push-ups (1 min max)</label>
+                        <input type="number" id="pushups" value="${weekData.pushups || ''}" placeholder="e.g., 30">
+                    </div>
+                    <div class="form-group">
+                        <label>Plank (seconds)</label>
+                        <input type="number" id="plank" value="${weekData.plank || ''}" placeholder="e.g., 120">
+                    </div>
+                </div>
+                
+                <div style="background: rgba(26,26,46,0.8); padding: 20px; border-radius: 5px;">
+                    <h4 style="color: #ff006e; margin-bottom: 15px; font-size: 0.7rem;">ENDURANCE</h4>
+                    <div class="form-group">
+                        <label>3km Time (minutes)</label>
+                        <input type="number" step="0.01" id="time3km" value="${weekData.time3km || ''}" placeholder="e.g., 15.5">
+                    </div>
+                    <div class="form-group">
+                        <label>Average Heart Rate (bpm)</label>
+                        <input type="number" id="avgHR" value="${weekData.avgHR || ''}" placeholder="e.g., 165">
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function savePlayerData() {
+            const weeks = [0, 2, 4, 6, 8, 10, 12];
+            const weekNumber = weeks[currentWeekEditing];
+            
+            const weekData = {
+                height: parseFloat(document.getElementById('height').value) || 0,
+                weight: parseFloat(document.getElementById('weight').value) || 0,
+                waist: parseFloat(document.getElementById('waist').value) || 0,
+                bench: parseFloat(document.getElementById('bench').value) || 0,
+                squat: parseFloat(document.getElementById('squat').value) || 0,
+                deadlift: parseFloat(document.getElementById('deadlift').value) || 0,
+                pushups: parseInt(document.getElementById('pushups').value) || 0,
+                plank: parseInt(document.getElementById('plank').value) || 0,
+                time3km: parseFloat(document.getElementById('time3km').value) || 0,
+                avgHR: parseInt(document.getElementById('avgHR').value) || 0
+            };
+            
+            currentPlayer.weeks[weekNumber] = weekData;
+            
+            try {
+                await window.storage.set(`player:${currentPlayer.name}`, JSON.stringify(currentPlayer), true);
+                alert('✅ DATA SAVED SUCCESSFULLY!');
+            } catch (error) {
+                alert('❌ ERROR SAVING DATA: ' + error.message);
+            }
+        }
+        
+        function calculateRFM(height, waist) {
+            if (height === 0 || waist === 0) return 0;
+            return 64 - (20 * (height / waist));
+        }
+        
+        function calculateFatMass(weight, rfm) {
+            return weight * (rfm / 100);
+        }
+        
+        function calculateBodyCompScore(player) {
+            const week0 = player.weeks[0];
+            const latestWeek = getLatestWeek(player);
+            
+            if (!week0 || !latestWeek || week0 === latestWeek) return 0;
+            
+            const rfmStart = calculateRFM(week0.height, week0.waist);
+            const fatMassStart = calculateFatMass(week0.weight, rfmStart);
+            
+            const rfmEnd = calculateRFM(latestWeek.height, latestWeek.waist);
+            const fatMassEnd = calculateFatMass(latestWeek.weight, rfmEnd);
+            
+            const fatLost = fatMassStart - fatMassEnd;
+            
+            if (fatMassStart === 0) return 0;
+            
+            return (fatLost / fatMassStart) * 100;
+        }
+        
+        function calculateStrengthScore(player) {
+            const week0 = player.weeks[0];
+            const latestWeek = getLatestWeek(player);
+            
+            if (!week0 || !latestWeek || week0 === latestWeek) return 0;
+            
+            const metrics = ['bench', 'squat', 'deadlift', 'pushups', 'plank'];
+            let totalImprovement = 0;
+            let count = 0;
+            
+            metrics.forEach(metric => {
+                const initial = week0[metric] || 0;
+                const final = latestWeek[metric] || 0;
+                
+                if (initial > 0) {
+                    const improvement = ((final - initial) / initial) * 100;
+                    totalImprovement += improvement;
+                    count++;
+                }
+            });
+            
+            return count > 0 ? totalImprovement / count : 0;
+        }
+        
+        function calculateEnduranceScore(player) {
+            const week0 = player.weeks[0];
+            const latestWeek = getLatestWeek(player);
+            
+            if (!week0 || !latestWeek || week0 === latestWeek) return 0;
+            
+            const initialTime = week0.time3km || 0;
+            const finalTime = latestWeek.time3km || 0;
+            const initialHR = week0.avgHR || 0;
+            const finalHR = latestWeek.avgHR || 0;
+            
+            if (initialTime === 0 || initialHR === 0) return 0;
+            
+            const timeImprovement = ((initialTime - finalTime) / initialTime) * 100;
+            const hrImprovement = ((initialHR - finalHR) / initialHR) * 100;
+            
+            return (timeImprovement + hrImprovement) / 2;
+        }
+        
+        function getLatestWeek(player) {
+            const weeks = [12, 10, 8, 6, 4, 2, 0];
+            for (let week of weeks) {
+                if (player.weeks[week]) {
+                    return player.weeks[week];
+                }
+            }
+            return null;
+        }
+        
+        function calculateOverallScore(player) {
+            const bodyComp = calculateBodyCompScore(player);
+            const strength = calculateStrengthScore(player);
+            const endurance = calculateEnduranceScore(player);
+            
+            return (bodyComp * 0.3333) + (strength * 0.3333) + (endurance * 0.3333);
+        }
+        
+        async function getAllPlayers() {
+            try {
+                const result = await window.storage.list('player:', true);
+                if (!result || !result.keys) return [];
+                
+                const players = [];
+                for (let key of result.keys) {
+                    try {
+                        const playerResult = await window.storage.get(key, true);
+                        if (playerResult) {
+                            players.push(JSON.parse(playerResult.value));
+                        }
+                    } catch (e) {
+                        console.error('Error loading player:', e);
+                    }
+                }
+                return players;
+            } catch (error) {
+                console.error('Error getting players:', error);
+                return [];
+            }
+        }
+        
+        async function updateOverallLeaderboard() {
+            const players = await getAllPlayers();
+            const container = document.getElementById('overallLeaderboard');
+            
+            const sorted = players
+                .map(p => ({
+                    name: p.name,
+                    score: calculateOverallScore(p)
+                }))
+                .filter(p => p.score > 0)
+                .sort((a, b) => b.score - a.score);
+            
+            if (sorted.length === 0) {
+                container.innerHTML = '<p style="color: #00d9ff;">No data yet. Start entering your progress!</p>';
+                return;
+            }
+            
+            container.innerHTML = sorted.map((player, index) => `
+                <div class="leaderboard-item">
+                    <span class="rank rank-${index + 1}">#${index + 1}</span>
+                    <div class="player-info">
+                        <div class="player-name">${player.name}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${Math.min(player.score, 100)}%">
+                                ${player.score.toFixed(2)}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function updateBodyCompLeaderboard() {
+            const players = await getAllPlayers();
+            const container = document.getElementById('bodycompLeaderboard');
+            
+            const sorted = players
+                .map(p => ({
+                    name: p.name,
+                    score: calculateBodyCompScore(p)
+                }))
+                .filter(p => p.score > 0)
+                .sort((a, b) => b.score - a.score);
+            
+            if (sorted.length === 0) {
+                container.innerHTML = '<p style="color: #00d9ff;">No data yet. Start entering your progress!</p>';
+                return;
+            }
+            
+            container.innerHTML = sorted.map((player, index) => `
+                <div class="leaderboard-item">
+                    <span class="rank rank-${index + 1}">#${index + 1}</span>
+                    <div class="player-info">
+                        <div class="player-name">${player.name}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${Math.min(player.score, 100)}%">
+                                ${player.score.toFixed(2)}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        async function updateStrengthLeaderboard() {
+            const players = await getAllPlayers();
+            const container = document.getElementById('strengthLeaderboard');
+            
+            const sorted = players
+                .map(p => ({
+                    name: p.name,
+                    score: calculateStrengthScore(p)
+                }))
+                .filter(p => p.score > 0)
+                .sort((a, b) => b.score - a.score);
+            
+            if (sorted.length === 0) {
+                container.innerHTML = '<p style="color: #00d9ff;">No data yet. Start entering your progress!</p>';
+                return;
+            }
+            
+            container.innerHTML = sorted.map((player, index) => `
+                <div class="leaderboard-item">
+                    <span class="rank rank-${index + 1}">#${index + 1}</span>
+                    <div class="player-info">
+                        <div class="player-name">${player.name}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${Math.min(Math.abs(player.score), 100)}%">

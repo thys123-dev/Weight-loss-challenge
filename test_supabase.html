@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Connection Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #00ff41;
+        }
+
+        .test-result {
+            background: rgba(15, 52, 96, 0.8);
+            border: 2px solid #00ff41;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            border-color: #00ff41;
+            color: #00ff41;
+        }
+
+        .error {
+            border-color: #ff006e;
+            color: #ff006e;
+        }
+
+        button {
+            background: #ff006e;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+
+        button:hover {
+            background: #00ff41;
+            color: #1a1a2e;
+        }
+
+        pre {
+            background: #1a1a2e;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Supabase Connection Test</h1>
+
+    <div>
+        <button onclick="testConnection()">Test Connection</button>
+        <button onclick="queryPlayers()">Query Players Table</button>
+        <button onclick="checkTableExists()">Check Table Structure</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        // Use the same credentials from index.html
+        const SUPABASE_URL = 'https://xdivxobxouyqujyivrfn.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_wfC7sCVRP_u8EuOESb5R6A_Z-B9_EuY';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function addResult(title, content, isError = false) {
+            const resultsDiv = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${isError ? 'error' : 'success'}`;
+            div.innerHTML = `
+                <h3>${title}</h3>
+                <pre>${typeof content === 'string' ? content : JSON.stringify(content, null, 2)}</pre>
+            `;
+            resultsDiv.appendChild(div);
+        }
+
+        async function testConnection() {
+            addResult('Testing Connection...', 'Connecting to Supabase...');
+
+            try {
+                // Simple connection test - try to query a system table or make a basic request
+                const { data, error } = await supabase
+                    .from('players')
+                    .select('count')
+                    .limit(1);
+
+                if (error) {
+                    addResult('❌ Connection Failed', error.message, true);
+                } else {
+                    addResult('✅ Connection Successful', 'Successfully connected to Supabase!');
+                }
+            } catch (e) {
+                addResult('❌ Connection Error', e.message, true);
+            }
+        }
+
+        async function queryPlayers() {
+            addResult('Querying Players Table...', 'Fetching all players...');
+
+            try {
+                const { data, error } = await supabase
+                    .from('players')
+                    .select('*');
+
+                if (error) {
+                    addResult('❌ Query Failed', error.message, true);
+                } else {
+                    if (data.length === 0) {
+                        addResult('✅ Query Successful', 'Players table exists but is empty. No players found.');
+                    } else {
+                        addResult(`✅ Query Successful - Found ${data.length} player(s)`, data);
+                    }
+                }
+            } catch (e) {
+                addResult('❌ Query Error', e.message, true);
+            }
+        }
+
+        async function checkTableExists() {
+            addResult('Checking Table Structure...', 'Verifying players table...');
+
+            try {
+                // Try to get table info by querying with limit 0
+                const { data, error } = await supabase
+                    .from('players')
+                    .select('*')
+                    .limit(0);
+
+                if (error) {
+                    if (error.code === '42P01') {
+                        addResult('❌ Table Does Not Exist', 'The "players" table does not exist. Please run the supabase_setup.sql script.', true);
+                    } else {
+                        addResult('❌ Error Checking Table', error.message, true);
+                    }
+                } else {
+                    addResult('✅ Table Exists', 'The "players" table exists and is accessible.');
+                }
+            } catch (e) {
+                addResult('❌ Error', e.message, true);
+            }
+        }
+
+        // Auto-run connection test on load
+        window.addEventListener('load', () => {
+            testConnection();
+        });
+    </script>
+</body>
+
+</html>
