@@ -684,14 +684,13 @@
             }
             const diffTime = now - challengeStartDate;
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            const week = Math.floor(diffDays / 14);
-            return Math.min(week, 6); // Max week 6 (week 12)
+            const week = Math.floor(diffDays / 7) + 1; // Weekly intervals, starting from week 1
+            return Math.min(week, 12); // Max week 12
         }
 
         function updateWeekDisplay() {
             const currentWeek = getCurrentWeek();
-            const weekNumber = currentWeek * 2;
-            document.getElementById('currentWeek').textContent = `CURRENT WEEK: ${weekNumber}`;
+            document.getElementById('currentWeek').textContent = `CURRENT WEEK: ${currentWeek}`;
         }
 
         let allPlayerNames = [];
@@ -947,7 +946,7 @@
             container.innerHTML = '';
 
             const currentWeek = getCurrentWeek();
-            const weeks = [0, 2, 4, 6, 8, 10, 12];
+            const weeks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
             weeks.forEach((week, index) => {
                 const btn = document.createElement('button');
@@ -986,7 +985,7 @@
                 return;
             }
 
-            const weeks = [0, 2, 4, 6, 8, 10, 12];
+            const weeks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
             const weekNumber = weeks[currentWeekEditing];
 
             // Only get data for the current player and current week - ensure it's fresh
@@ -1012,18 +1011,14 @@
                 </div>
                 
                 <div style="background: rgba(39,63,79,0.8); padding: 20px; border-radius: 5px; margin-bottom: 20px;">
-                    <h4 style="color: #FE7743; margin-bottom: 15px; font-size: 0.7rem;">STRENGTH (5RM in kg)</h4>
+                    <h4 style="color: #FE7743; margin-bottom: 15px; font-size: 0.7rem;">STRENGTH</h4>
                     <div class="form-group">
-                        <label>Bench Press 5RM (kg)</label>
-                        <input type="number" step="0.5" id="bench" value="${weekData.bench || ''}" placeholder="e.g., 60">
+                        <label>Pull-ups (1 min max)</label>
+                        <input type="number" id="pullups" value="${weekData.pullups || ''}" placeholder="e.g., 15">
                     </div>
                     <div class="form-group">
-                        <label>Front Squat 5RM (kg)</label>
-                        <input type="number" step="0.5" id="squat" value="${weekData.squat || ''}" placeholder="e.g., 80">
-                    </div>
-                    <div class="form-group">
-                        <label>Deadlift 5RM (kg)</label>
-                        <input type="number" step="0.5" id="deadlift" value="${weekData.deadlift || ''}" placeholder="e.g., 100">
+                        <label>Sit-ups (1 min max)</label>
+                        <input type="number" id="situps" value="${weekData.situps || ''}" placeholder="e.g., 40">
                     </div>
                     <div class="form-group">
                         <label>Push-ups (1 min max)</label>
@@ -1054,16 +1049,15 @@
         }
 
         async function savePlayerData() {
-            const weeks = [0, 2, 4, 6, 8, 10, 12];
+            const weeks = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
             const weekNumber = weeks[currentWeekEditing];
 
             const weekData = {
                 height: parseFloat(document.getElementById('height').value) || 0,
                 weight: parseFloat(document.getElementById('weight').value) || 0,
                 waist: parseFloat(document.getElementById('waist').value) || 0,
-                bench: parseFloat(document.getElementById('bench').value) || 0,
-                squat: parseFloat(document.getElementById('squat').value) || 0,
-                deadlift: parseFloat(document.getElementById('deadlift').value) || 0,
+                pullups: parseInt(document.getElementById('pullups').value) || 0,
+                situps: parseInt(document.getElementById('situps').value) || 0,
                 pushups: parseInt(document.getElementById('pushups').value) || 0,
                 plank: parseInt(document.getElementById('plank').value) || 0,
                 time3km: timeToDecimal(document.getElementById('time3km').value),
@@ -1121,7 +1115,7 @@
 
             if (!week0 || !latestWeek || week0 === latestWeek) return 0;
 
-            const metrics = ['bench', 'squat', 'deadlift', 'pushups', 'plank'];
+            const metrics = ['pullups', 'situps', 'pushups', 'plank'];
             let totalImprovement = 0;
             let count = 0;
 
@@ -1137,7 +1131,7 @@
                 }
             });
 
-            // Strength Score = average % improvement across all 5 tests
+            // Strength Score = average % improvement across all 4 tests
             return count > 0 ? totalImprovement / count : 0;
         }
 
@@ -1182,7 +1176,7 @@
         }
 
         function getLatestWeek(player) {
-            const weeks = [12, 10, 8, 6, 4, 2, 0];
+            const weeks = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
             for (let week of weeks) {
                 if (player.weeks[week] && hasValidData(player.weeks[week])) {
                     return player.weeks[week];

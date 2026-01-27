@@ -1,6 +1,6 @@
 # 🟩 **12-WEEK FITNESS TRANSFORMATION CHALLENGE**
 
-### **(RFM Body Fat %, Fat Mass Lost, Strength 5RM, Endurance 3 km Time + Avg HR)**
+### **(RFM Body Fat %, Fat Mass Lost, Strength Bodyweight Tests, Endurance 3 km Time + Avg HR)**
 
 ---
 
@@ -73,16 +73,15 @@ To keep things fair, fat loss is expressed as a percentage:
 
 ## 2.1 Metrics
 
-* **5RM Bench Press**
-* **5RM Front Squat**
-* **5RM Deadlift**
+* **Maximum pull-ups in 1 min**
+* **Maximum sit-ups in 1 min**
 * **Push-ups (1-minute max)**
 * **Plank (time to failure)**
 
 ## 2.2 Rules
 
-* All barbell lifts must use a **20 kg Olympic barbell**.
-* 5RM = heaviest load for 5 perfect reps.
+* Pull-ups: strict form only, full range of motion.
+* Sit-ups: strict form only, full range of motion.
 * Push-ups: strict form only.
 * Plank ends when hips sag or form breaks.
 
@@ -93,7 +92,7 @@ To keep things fair, fat loss is expressed as a percentage:
 \frac{\text{Final} - \text{Initial}}{\text{Initial}} \times 100
 ]
 
-Strength Score = **average % improvement across all 5 tests**.
+Strength Score = **average % improvement across all 4 tests**.
 
 ---
 
