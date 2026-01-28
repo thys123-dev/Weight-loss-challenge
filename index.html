@@ -236,7 +236,10 @@
             align-items: center;
             justify-content: center;
             font-size: 0.6rem;
-            color: #273F4F;
+            color: #000000;
+            font-weight: bold;
+            min-width: fit-content;
+            padding: 0 5px;
         }
 
         .metrics-grid {
@@ -1124,10 +1127,20 @@
             let totalImprovement = 0;
             let count = 0;
 
+            // Check if week 0 has any of the new metrics (for data migration)
+            const hasNewMetricsInWeek0 = metrics.some(metric => (week0[metric] || 0) > 0);
+            
+            // If week 0 doesn't have new metrics but has old metrics (bench/squat/deadlift),
+            // treat week 1 as baseline instead to avoid negative scores from migration
+            const hasOldMetricsInWeek0 = (week0.bench || week0.squat || week0.deadlift) && !hasNewMetricsInWeek0;
+            const baselineWeek = hasOldMetricsInWeek0 && player.weeks[1] ? player.weeks[1] : week0;
+
             metrics.forEach(metric => {
-                const initial = week0[metric] || 0;
+                const initial = baselineWeek[metric] || 0;
                 const final = latestWeek[metric] || 0;
 
+                // Only calculate if we have valid initial data (greater than 0)
+                // This prevents issues with old data (bench/squat/deadlift) or zero values
                 if (initial > 0) {
                     // % Improvement = (Final - Initial) / Initial × 100
                     const improvement = ((final - initial) / initial) * 100;
@@ -1137,6 +1150,8 @@
             });
 
             // Strength Score = average % improvement across all 4 tests
+            // Only return score if we have at least one valid metric comparison
+            // This prevents negative scores from old data migration issues
             return count > 0 ? totalImprovement / count : 0;
         }
 
@@ -1385,6 +1400,8 @@
             container.innerHTML = sorted.map((player, index) => {
                 const maxScore = Math.max(...sorted.map(p => Math.abs(p.score)));
                 const widthPercent = maxScore > 0 ? Math.min((Math.abs(player.score) / maxScore) * 100, 100) : 0;
+                // Ensure minimum width for visibility when score is very small
+                const minWidth = widthPercent < 15 ? 15 : widthPercent;
 
                 return `
                     <div class="leaderboard-item">
@@ -1392,7 +1409,7 @@
                         <div class="player-info">
                             <div class="player-name">${player.name}</div>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${widthPercent}%">
+                                <div class="progress-fill" style="width: ${minWidth}%">
                                     ${player.score.toFixed(2)}%
                                 </div>
                             </div>
